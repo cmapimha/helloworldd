@@ -49,7 +49,7 @@ jobs:
             subscriptionId: '${{ parameters.subscriptionId }}'
             resourceGroupName: '${{ parameters.resourceGroupName }}'
             location: '${{ parameters.location }}'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/acr.bicep'
+            csmFile: '$(System.DefaultWorkingDirectory)/Bicep Templates/acr.bicep'
             overrideParameters: >
               -acrName ${{ parameters.acrName }}
 
@@ -61,7 +61,7 @@ jobs:
             subscriptionId: '${{ parameters.subscriptionId }}'
             resourceGroupName: '${{ parameters.resourceGroupName }}'
             location: '${{ parameters.location }}'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/loganalytics.bicep'
+            csmFile: '$(System.DefaultWorkingDirectory)/Bicep Templates/loganalytics.bicep'
             overrideParameters: >
               -workspaceName ${{ parameters.logAnalyticsName }}
 
@@ -73,7 +73,7 @@ jobs:
             subscriptionId: '${{ parameters.subscriptionId }}'
             resourceGroupName: '${{ parameters.resourceGroupName }}'
             location: '${{ parameters.location }}'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/containerapp-env.bicep'
+            csmFile: '$(System.DefaultWorkingDirectory)/Bicep Templates/containerapp-env.bicep'
             overrideParameters: >
               -environmentName ${{ parameters.containerAppEnvName }}
               -logAnalyticsWorkspaceId /subscriptions/${{ parameters.subscriptionId }}/resourceGroups/${{ parameters.resourceGroupName }}/providers/Microsoft.OperationalInsights/workspaces/${{ parameters.logAnalyticsName }}
@@ -86,7 +86,7 @@ jobs:
             subscriptionId: '${{ parameters.subscriptionId }}'
             resourceGroupName: '${{ parameters.resourceGroupName }}'
             location: '${{ parameters.location }}'
-            csmFile: '$(System.DefaultWorkingDirectory)/infra/containerapp.bicep'
+            csmFile: '$(System.DefaultWorkingDirectory)/Bicep Templates/containerapp.bicep'
             overrideParameters: >
               -containerAppName ${{ parameters.containerAppName }}
               -containerImage ${{ parameters.containerImage }}
