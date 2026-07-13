@@ -6,7 +6,9 @@ stages:
   - stage: Development
     displayName: "Deploy ACA Infrastructure"
     variables:
-      - group: 
+      variables:
+         - template: variables/variables.yaml
+
     jobs:
       - template: Deploy-container-app.yaml
         parameters:
