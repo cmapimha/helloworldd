@@ -1,1 +1,30 @@
+#Not Completed yet 
+
+trigger: none
+
+stages:
+  - stage: Development
+    displayName: "Deploy ACA Infrastructure"
+    variables:
+      - group: 
+    jobs:
+      - template: Deploy-container-app.yaml
+        parameters:
+          azureSubscription: 
+          subscriptionId: 
+          resourceGroupName: 
+          regionName: '
+
+          # ACR
+          acrName: '$acrName'
+
+          # Log Analytics
+          logAnalyticsWorkspaceName: '$logAnalyticsWorkspaceName'
+
+          # ACA Environment
+          containerAppEnvName: '$containerAppEnvName'
+
+          # Container App
+          containerAppName: '$containerAppName'
+          containerImage: '$containerImage'
 
