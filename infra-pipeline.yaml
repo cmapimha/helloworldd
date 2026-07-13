@@ -1,1 +1,25 @@
+#Not Completed yet 
+trigger:
+  branches:
+    include:
+      - main
+
+stages:
+  - stage: Development
+    displayName: "Deploy ACA Hello Worldd Infrastructure"
+
+    variables:
+      - template: variables/variables.yaml
+
+    jobs:
+      - template: Deploy-container-app.yaml
+        parameters:
+          subscriptionId: $(subscriptionId)
+          resourceGroupName: $(resourceGroupName)
+          location: $(location)
+          acrName: $(acrName)
+          logAnalyticsWorkspaceName: $(logAnalyticsWorkspaceName)
+          containerAppEnvName: $(containerAppEnvName)
+          containerAppName: $(containerAppName)
+          containerImage: $(containerImage)
 

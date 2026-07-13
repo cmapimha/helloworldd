@@ -1,1 +1,24 @@
+variables:
+- name: subscriptionId
+  value: 'a31d6509-ddd1-4fde-9f82-0e7abc735ad2'
 
+- name: resourceGroupName
+  value: 'my-work-blog'
+
+- name: location
+  value: 'eastus'
+
+- name: acrName
+  value: 'acadockerhelloworldd'
+
+- name: logAnalyticsWorkspaceName
+  value: 'aca-helloworldd-log'
+
+- name: containerAppEnvName
+  value: 'aca-helloworldd-env'
+
+- name: containerAppName
+  value: 'aca-helloworldd-app'
+
+- name: containerImage
+  value: 'acadockerdev.azurecr.io/hello-worldd:latest'
