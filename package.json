@@ -1,10 +1,13 @@
 {
   "name": "hello-world",
   "version": "1.0.0",
-  "description": "Simple Node.js Hello World project",
+  "description": "Node.js Hello World Web Server",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"No tests yet\""
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
   }
 }
+
