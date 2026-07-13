@@ -1,1 +1,9 @@
+  subscriptionId: ''
+  resourceGroupName: ''
+  location: 'eastus'
 
+  acrName: 'acadockerdev'
+  logAnalyticsWorkspaceName: 'aca-helloworldd-logs'
+  containerAppEnvName: 'aca-helloworldd-env'
+  containerAppName: 'aca-helloworldd-app'
+  containerImage: 'acadockerdev.azurecr.io/hello-world:latest'
