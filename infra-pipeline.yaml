@@ -1,5 +1,8 @@
 #Not Completed yet 
-trigger: none
+trigger:
+  branches:
+    include:
+      - main
 
 stages:
   - stage: Development
