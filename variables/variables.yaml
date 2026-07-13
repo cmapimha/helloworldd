@@ -1,9 +1,9 @@
 variables:
 - name: subscriptionId
-  value: ''
+  value: 'a31d6509-ddd1-4fde-9f82-0e7abc735ad2'
 
 - name: resourceGroupName
-  value: ''
+  value: 'my-work-blog'
 
 - name: location
   value: 'eastus'
