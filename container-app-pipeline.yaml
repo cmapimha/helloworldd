@@ -6,16 +6,29 @@ pool:
   vmImage: ubuntu-latest
 
 stages:
-  - stage: Development
-    displayName: "Deploy ACA Hello Worldd App"
+- stage: Build
+  displayName: "Build & Push Docker Image"
 
-    variables:
-      - template: variables/variables.yaml
+  jobs:
+  - template: templates/docker-build-template.yaml
+    parameters:
+      containerRegistry: $(dockerServiceConnection)
+      repositoryName: $(aca-repo)
+      dockerfilePath: 'Dockerfile'
+      environmentName: $(ado-env)
+      pushImage: true
+      tag: $(Build.BuildId)
 
-- template: Templates/container-app.yaml
-  parameters:
-    subscriptionId: $(subscriptionId)
-    resourceGroupName: $(resourceGroupName)
-    containerAppEnvName: $(containerAppEnvName)
-    containerAppName: $(containerAppName)
-    containerImage: $(containerImage)
+- stage: Deploy
+  displayName: "Deploy Azure Container App"
+  dependsOn: Build
+
+  jobs:
+  - template: templates/Deploy-container-app.yaml
+    parameters:
+      subscriptionId: $(subscriptionId)
+      resourceGroupName: $(resourceGroupName)
+      containerAppEnvName: $(containerAppEnvName)
+      containerAppName: $(containerAppName)
+      containerImage: "$(acrLoginServer)/$(aca-repo):$(Build.BuildId)"
+      tag: $(Build.BuildId)
