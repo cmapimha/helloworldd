@@ -1,4 +1,18 @@
-- template: templates/Deploy-container-app.yaml
+trigger:
+  branches:
+    include:
+      - main
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: Development
+    displayName: "Deploy ACA Hello Worldd App"
+
+    variables:
+      - template: variables/variables.yaml
+
+- template: Templates/container-app.yaml
   parameters:
     subscriptionId: $(subscriptionId)
     resourceGroupName: $(resourceGroupName)
