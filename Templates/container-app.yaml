@@ -1,0 +1,37 @@
+parameters:
+- name: subscriptionId
+  type: string
+- name: resourceGroupName
+  type: string
+- name: containerAppEnvName
+  type: string
+- name: containerAppName
+  type: string
+- name: containerImage
+  type: string
+
+jobs:
+- job: DeployContainerApp
+  displayName: "Deploy Container App to ACA"
+
+  steps:
+    - checkout: self
+
+    - task: AzureCLI@2
+      displayName: "Deploy Container App"
+      inputs:
+        azureSubscription: ${{ parameters.subscriptionId }}
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          echo "Deploying Container App: ${{ parameters.containerAppName }}"
+
+          az deployment group create \
+            --resource-group ${{ parameters.resourceGroupName }} \
+            --template-file "Bicep Templates/container-app.bicep" \
+            --parameters \
+              containerAppName=${{ parameters.containerAppName }} \
+              containerAppEnvName=${{ parameters.containerAppEnvName }} \
+              containerImage=${{ parameters.containerImage }}
+
+          echo "Container App deployment completed."
