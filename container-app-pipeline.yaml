@@ -1,0 +1,7 @@
+- template: templates/Deploy-container-app.yaml
+  parameters:
+    subscriptionId: $(subscriptionId)
+    resourceGroupName: $(resourceGroupName)
+    containerAppEnvName: $(containerAppEnvName)
+    containerAppName: $(containerAppName)
+    containerImage: $(containerImage)
