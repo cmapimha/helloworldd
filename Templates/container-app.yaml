@@ -33,7 +33,7 @@ jobs:
 
             az deployment group create \
               --resource-group ${{ parameters.resourceGroupName }} \
-              --template-file "Bicep Templates/container-app.bicep" \
+              --template-file "Bicep Templates/containerapp.bicep" \
               --parameters \
                 containerAppName=${{ parameters.containerAppName }} \
                 containerImage=${{ parameters.containerImage }} \
