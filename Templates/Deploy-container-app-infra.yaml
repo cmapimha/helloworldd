@@ -18,9 +18,8 @@ parameters:
     type: string
   - name: containerImage
     type: string
-  - name: appName
-    type: string
   - name: ServiceConnection
+    type: string
 
 jobs:
 - deployment: DeployInfra
