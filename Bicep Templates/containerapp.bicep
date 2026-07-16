@@ -20,7 +20,7 @@ param acrUsername string
 @secure()
 param acrPassword string
 
-resource containerApp 'Microsoft.Web/containerApps@2023-10-01' = {
+resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
   name: containerAppName
   location: location
   properties: {
