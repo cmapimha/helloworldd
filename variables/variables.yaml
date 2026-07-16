@@ -30,7 +30,7 @@ variables:
   value: 'hello-worldd'
 
 - name: acrLoginServer
-  value: 'acadockerdev.azurecr.io'
+  value: 'acadockerhelloworldd.azurecr.io'
 
 - name: tag
   value: '$(Build.BuildId)'
