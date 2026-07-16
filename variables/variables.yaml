@@ -11,7 +11,7 @@ variables:
 - name: acrName
   value: 'acadockerhelloworldd'
 
-- name: logAnalyticsWorkspaceName
+- name: logAnalyticsName
   value: 'aca-helloworldd-log'
 
 - name: containerAppEnvName
