@@ -22,69 +22,81 @@ parameters:
     type: string
 
 jobs:
-- deployment: DeployInfra
-  displayName: 'Deploy Hello World Infrastructure'
-  environment:
-    name: '${{ parameters.environmentName }}'
-  strategy:
-    runOnce:
-      deploy:
-        steps:
-        - checkout: self
+  - deployment: DeployInfra
+    displayName: 'Deploy Hello World Infrastructure'
+    environment:
+      name: '${{ parameters.environmentName }}'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
 
-        # Create or Update Resource Group
-        - task: AzureCLI@2
-          displayName: 'Create or Update Resource Group'
-          inputs:
-            azureSubscription: '${{ parameters.serviceConnection }}'
-            scriptType: bash
-            scriptLocation: inlineScript
-            inlineScript: |
-              echo "Checking if resource group exists: ${{ parameters.resourceGroupName }}"
+            # Create or Update Resource Group
+            - task: AzureCLI@2
+              displayName: 'Create or Update Resource Group'
+              inputs:
+                azureSubscription: '${{ parameters.serviceConnection }}'
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  echo "Checking if resource group exists: ${{ parameters.resourceGroupName }}"
 
-              if az group exists --name ${{ parameters.resourceGroupName }}; then
-                echo "Resource group already exists. Skipping creation."
-              else
-                echo "Resource group does not exist. Creating..."
-                az group create \
-                  --name ${{ parameters.resourceGroupName }} \
-                  --location ${{ parameters.location }}
-              fi
+                  if az group exists --name "${{ parameters.resourceGroupName }}"; then
+                    echo "Resource group already exists. Skipping creation."
+                  else
+                    echo "Resource group does not exist. Creating..."
+                    az group create \
+                      --name "${{ parameters.resourceGroupName }}" \
+                      --location "${{ parameters.location }}"
+                  fi
 
-        # Deploy ACR
-        - task: AzureResourceManagerTemplateDeployment@3
-          displayName: 'Deploy ACR'
-          inputs:
-            azureResourceManagerConnection: '${{ parameters.serviceConnection }}'
-            subscriptionId: '${{ parameters.subscriptionId }}'
-            resourceGroupName: '${{ parameters.resourceGroupName }}'
-            location: '${{ parameters.location }}'
-            csmFile: '$(System.DefaultWorkingDirectory)/Bicep Templates/acr.bicep'
-            overrideParameters: >
-              -acrName ${{ parameters.acrName }}
+            # Register ACR Resource Provider
+            - task: AzureCLI@2
+              displayName: 'Register ACR Resource Provider'
+              inputs:
+                azureSubscription: '${{ parameters.serviceConnection }}'
+                scriptType: bash
+                scriptLocation: inlineScript
+                inlineScript: |
+                  az provider register --namespace Microsoft.ContainerRegistry
+                  az provider register --namespace Microsoft.OperationalInsights
+                  az provider register --namespace Microsoft.Web
 
-        # Deploy Log Analytics Workspace
-        - task: AzureResourceManagerTemplateDeployment@3
-          displayName: 'Deploy Log Analytics'
-          inputs:
-            azureResourceManagerConnection: '${{ parameters.serviceConnection }}'
-            subscriptionId: '${{ parameters.subscriptionId }}'
-            resourceGroupName: '${{ parameters.resourceGroupName }}'
-            location: '${{ parameters.location }}'
-            csmFile: '$(System.DefaultWorkingDirectory)/Bicep Templates/loganalytics.bicep'
-            overrideParameters: >
-              -workspaceName ${{ parameters.logAnalyticsName }}
+            # Deploy ACR
+            - task: AzureResourceManagerTemplateDeployment@3
+              displayName: 'Deploy ACR'
+              inputs:
+                azureResourceManagerConnection: '${{ parameters.serviceConnection }}'
+                subscriptionId: '${{ parameters.subscriptionId }}'
+                resourceGroupName: '${{ parameters.resourceGroupName }}'
+                location: '${{ parameters.location }}'
+                csmFile: '$(System.DefaultWorkingDirectory)/Bicep Templates/acr.bicep'
+                overrideParameters: >
+                  -acrName ${{ parameters.acrName }}
 
-        # Deploy ACA Environment
-        - task: AzureResourceManagerTemplateDeployment@3
-          displayName: 'Deploy Container Apps Environment'
-          inputs:
-            azureResourceManagerConnection: '${{ parameters.serviceConnection }}'
-            subscriptionId: '${{ parameters.subscriptionId }}'
-            resourceGroupName: '${{ parameters.resourceGroupName }}'
-            location: '${{ parameters.location }}'
-            csmFile: '$(System.DefaultWorkingDirectory)/Bicep Templates/containerapp-env.bicep'
-            overrideParameters: >
-              -environmentName ${{ parameters.containerAppEnvName }}
-              -logAnalyticsWorkspaceId /subscriptions/${{ parameters.subscriptionId }}/resourceGroups/${{ parameters.resourceGroupName }}/providers/Microsoft.OperationalInsights/workspaces/${{ parameters.logAnalyticsName }}
+            # Deploy Log Analytics Workspace
+            - task: AzureResourceManagerTemplateDeployment@3
+              displayName: 'Deploy Log Analytics'
+              inputs:
+                azureResourceManagerConnection: '${{ parameters.serviceConnection }}'
+                subscriptionId: '${{ parameters.subscriptionId }}'
+                resourceGroupName: '${{ parameters.resourceGroupName }}'
+                location: '${{ parameters.location }}'
+                csmFile: '$(System.DefaultWorkingDirectory)/Bicep Templates/loganalytics.bicep'
+                overrideParameters: >
+                  -workspaceName ${{ parameters.logAnalyticsName }}
+
+            # Deploy ACA Environment
+            - task: AzureResourceManagerTemplateDeployment@3
+              displayName: 'Deploy Container Apps Environment'
+              inputs:
+                azureResourceManagerConnection: '${{ parameters.serviceConnection }}'
+                subscriptionId: '${{ parameters.subscriptionId }}'
+                resourceGroupName: '${{ parameters.resourceGroupName }}'
+                location: '${{ parameters.location }}'
+                csmFile: '$(System.DefaultWorkingDirectory)/Bicep Templates/containerapp-env.bicep'
+                overrideParameters: >
+                  -environmentName ${{ parameters.containerAppEnvName }}
+                  -logAnalyticsWorkspaceId /subscriptions/${{ parameters.subscriptionId }}/resourceGroups/${{ parameters.resourceGroupName }}/providers/Microsoft.OperationalInsights/workspaces/${{ parameters.logAnalyticsName }}
 
