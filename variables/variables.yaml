@@ -23,7 +23,7 @@ variables:
 - name: containerImage
   value: 'acadockerdev.azurecr.io/hello-worldd:latest'
 
-  - name: ServiceConnection
+- name: ServiceConnection
   value: 'my-work-helloworldd-portfolio '
 
 - name: aca-repo
