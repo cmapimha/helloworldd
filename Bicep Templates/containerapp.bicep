@@ -17,7 +17,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
   name: containerAppName
   location: location
   identity: {
-    type: 'system'
+    type: 'SystemAssigned'
   }
   properties: {
     managedEnvironmentId: environmentId
@@ -29,7 +29,7 @@ resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
       registries: [
         {
           server: acrLoginServer
-          identity: 'systemAssigned'
+          identity: 'system'
         }
       ]
     }
