@@ -23,5 +23,5 @@ stages:
           containerAppEnvName: $(containerAppEnvName)
           containerAppName: $(containerAppName)
           containerImage: $(containerImage)
-          serviceConnection: $(serviceConnection)
+          serviceConnection: 'my-work-helloworldd-portfolio'
 
