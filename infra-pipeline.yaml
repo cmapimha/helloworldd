@@ -13,7 +13,7 @@ stages:
       - template: variables/variables.yaml
 
     jobs:
-      - template: Templates/container-app.yaml
+      - template: Templates/Deploy-container-app-infra.yaml
         parameters:
           subscriptionId: $(subscriptionId)
           resourceGroupName: $(resourceGroupName)
