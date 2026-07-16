@@ -13,6 +13,8 @@ parameters:
     type: string
   - name: serviceConnection
     type: string
+  - name: location
+    type: string
 
 jobs:
   - job: DeployContainerApp
@@ -31,11 +33,12 @@ jobs:
 
             az deployment group create \
               --resource-group ${{ parameters.resourceGroupName }} \
-              --template-file "Bicep Templates/containerapp.bicep" \
+              --template-file "Bicep Templates/container-app.bicep" \
               --parameters \
                 containerAppName=${{ parameters.containerAppName }} \
                 containerImage=${{ parameters.containerImage }} \
-                environmentId=${{ parameters.containerAppEnvName }} \
-                acrLoginServer=${{ parameters.acrLoginServer }}
+                environmentId=/subscriptions/${{ parameters.subscriptionId }}/resourceGroups/${{ parameters.resourceGroupName }}/providers/Microsoft.App/managedEnvironments/${{ parameters.containerAppEnvName }} \
+                acrLoginServer=${{ parameters.acrLoginServer }} \
+                location=${{ parameters.location }}
 
             echo "Container App deployment completed."
