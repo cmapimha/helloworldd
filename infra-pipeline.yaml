@@ -23,4 +23,6 @@ stages:
           containerAppEnvName: $(containerAppEnvName)
           containerAppName: $(containerAppName)
           containerImage: $(containerImage)
+          serviceConnection: $(serviceConnection)
+          appName: $(appName)
 
