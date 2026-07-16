@@ -22,3 +22,15 @@ variables:
 
 - name: containerImage
   value: 'acadockerdev.azurecr.io/hello-worldd:latest'
+
+  - name: ServiceConnection
+  value: 'will add this '
+
+- name: aca-repo
+  value: 'hello-worldd'
+
+- name: acrLoginServer
+  value: 'acadockerdev.azurecr.io'
+
+- name: tag
+  value: '$(Build.BuildId)'
