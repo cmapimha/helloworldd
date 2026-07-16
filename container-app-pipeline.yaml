@@ -2,37 +2,38 @@ trigger:
   branches:
     include:
       - main
+
 pool:
   vmImage: ubuntu-latest
 
-  variables:
-      - template: variables/variables.yaml
+variables:
+  - template: variables/variables.yaml
 
 stages:
-- stage: Build
-  displayName: "Build & Push Docker Image"
+  - stage: Build
+    displayName: "Build & Push Docker Image"
 
-  jobs:
-- template: build-image.yaml
-  parameters:
-      containerRegistry: $(acrLoginServer)
-      repositoryName: $(acaRepo)
-      dockerfilePath: 'Dockerfile'
-      environmentName: 'Dev'
-      pushImage: true
-      tag: $(Build.BuildId)
+    jobs:
+      - template: build-image.yaml
+        parameters:
+          containerRegistry: $(acrLoginServer)
+          repositoryName: $(acaRepo)
+          dockerfilePath: 'Dockerfile'
+          environmentName: 'Dev'
+          pushImage: true
+          tag: $(Build.BuildId)
 
-- stage: Deploy
-  displayName: "Deploy Azure Container App"
-  dependsOn: Build
+  - stage: Deploy
+    displayName: "Deploy Azure Container App"
+    dependsOn: Build
 
-  jobs:
-  - template: Templates/container-app.yaml
-    parameters:
-      subscriptionId: $(subscriptionId)
-      resourceGroupName: $(resourceGroupName)
-      containerAppEnvName: $(containerAppEnvName)
-      containerAppName: $(containerAppName)
-      containerImage: "$(acrLoginServer)/$(aca-repo):$(Build.BuildId)"
-      tag: $(Build.BuildId)
+    jobs:
+      - template: Templates/container-app.yaml
+        parameters:
+          subscriptionId: $(subscriptionId)
+          resourceGroupName: $(resourceGroupName)
+          containerAppEnvName: $(containerAppEnvName)
+          containerAppName: $(containerAppName)
+          containerImage: "$(acrLoginServer)/$(aca-repo):$(Build.BuildId)"
+          tag: $(Build.BuildId)
       
