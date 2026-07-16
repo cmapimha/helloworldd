@@ -24,7 +24,7 @@ variables:
   value: 'acadockerdev.azurecr.io/hello-worldd:latest'
 
   - name: ServiceConnection
-  value: 'will add this '
+  value: 'my-work-helloworldd-portfolio '
 
 - name: aca-repo
   value: 'hello-worldd'
