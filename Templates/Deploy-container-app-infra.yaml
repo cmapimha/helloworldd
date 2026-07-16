@@ -20,7 +20,7 @@ parameters:
     type: string
   - name: appName
     type: string
-  - name: azureSubscription
+  - name: ServiceConnection
 
 jobs:
 - deployment: DeployInfra
@@ -49,7 +49,7 @@ jobs:
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Deploy ACR'
           inputs:
-            azureResourceManagerConnection: '${{ parameters.environmentName }}'
+            azureResourceManagerConnection: '${{ parameters.ServiceConnection }}'
             subscriptionId: '${{ parameters.subscriptionId }}'
             resourceGroupName: '${{ parameters.resourceGroupName }}'
             location: '${{ parameters.location }}'
@@ -61,7 +61,7 @@ jobs:
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Deploy Log Analytics'
           inputs:
-            azureResourceManagerConnection: '${{ parameters.environmentName }}'
+            azureResourceManagerConnection: '${{ parameters.ServiceConnection }}'
             subscriptionId: '${{ parameters.subscriptionId }}'
             resourceGroupName: '${{ parameters.resourceGroupName }}'
             location: '${{ parameters.location }}'
@@ -73,7 +73,7 @@ jobs:
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Deploy Container Apps Environment'
           inputs:
-            azureResourceManagerConnection: '${{ parameters.environmentName }}'
+            azureResourceManagerConnection: '${{ parameters.ServiceConnection }}'
             subscriptionId: '${{ parameters.subscriptionId }}'
             resourceGroupName: '${{ parameters.resourceGroupName }}'
             location: '${{ parameters.location }}'
@@ -81,21 +81,3 @@ jobs:
             overrideParameters: >
               -environmentName ${{ parameters.containerAppEnvName }}
               -logAnalyticsWorkspaceId /subscriptions/${{ parameters.subscriptionId }}/resourceGroups/${{ parameters.resourceGroupName }}/providers/Microsoft.OperationalInsights/workspaces/${{ parameters.logAnalyticsName }}
-
-        # Deploy Container App
-        - task: AzureResourceManagerTemplateDeployment@3
-          displayName: 'Deploy Container App'
-          inputs:
-            azureResourceManagerConnection: '${{ parameters.environmentName }}'
-            subscriptionId: '${{ parameters.subscriptionId }}'
-            resourceGroupName: '${{ parameters.resourceGroupName }}'
-            location: '${{ parameters.location }}'
-            csmFile: '$(System.DefaultWorkingDirectory)/Bicep Templates/containerapp.bicep'
-            overrideParameters: >
-              -containerAppName ${{ parameters.containerAppName }}
-              -containerImage ${{ parameters.containerImage }}
-              -environmentId /subscriptions/${{ parameters.subscriptionId }}/resourceGroups/${{ parameters.resourceGroupName }}/providers/Microsoft.Web/kubeEnvironments/${{ parameters.containerAppEnvName }}
-              -acrLoginServer ${{ parameters.acrName }}.azurecr.io
-              -acrUsername $(acrUsername)
-              -acrPassword $(acrPassword)
-
