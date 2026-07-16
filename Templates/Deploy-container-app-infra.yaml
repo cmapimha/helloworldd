@@ -18,6 +18,9 @@ parameters:
     type: string
   - name: containerImage
     type: string
+  - name: appName
+    type: string
+  - name: azureSubscription
 
 jobs:
 - deployment: DeployInfra
