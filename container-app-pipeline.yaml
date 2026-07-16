@@ -16,12 +16,11 @@ stages:
     jobs:
       - template: Templates/deploy-docker.yaml
         parameters:
-          containerRegistry: $(acrLoginServer)
-          repositoryName: $(acaRepo)
+          acrName: $(acrName)
+          acrLoginServer: $(acrLoginServer)
+          containerImage: $(aca-repo)
           dockerfilePath: 'Dockerfile'
-          environmentName: 'Dev'
-          pushImage: true
-          tag: $(Build.BuildId)
+          serviceConnection: 'my-work-helloworldd-portfolio'
 
   - stage: Deploy
     displayName: "Deploy Azure Container App"
@@ -35,5 +34,6 @@ stages:
           containerAppEnvName: $(containerAppEnvName)
           containerAppName: $(containerAppName)
           containerImage: "$(acrLoginServer)/$(aca-repo):$(Build.BuildId)"
-          tag: $(Build.BuildId)
+          acrLoginServer: $(acrLoginServer)
+          serviceConnection: 'my-work-helloworldd-portfolio'
       
