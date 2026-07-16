@@ -1,37 +1,41 @@
 parameters:
-- name: subscriptionId
-  type: string
-- name: resourceGroupName
-  type: string
-- name: containerAppEnvName
-  type: string
-- name: containerAppName
-  type: string
-- name: containerImage
-  type: string
+  - name: subscriptionId
+    type: string
+  - name: resourceGroupName
+    type: string
+  - name: containerAppEnvName
+    type: string
+  - name: containerAppName
+    type: string
+  - name: containerImage
+    type: string
+  - name: acrLoginServer
+    type: string
+  - name: serviceConnection
+    type: string
 
 jobs:
-- job: DeployContainerApp
-  displayName: "Deploy Container App to ACA"
+  - job: DeployContainerApp
+    displayName: "Deploy Container App to ACA"
+    steps:
+      - checkout: self
 
-  steps:
-    - checkout: self
+      - task: AzureCLI@2
+        displayName: "Deploy Container App"
+        inputs:
+          azureSubscription: ${{ parameters.serviceConnection }}
+          scriptType: bash
+          scriptLocation: inlineScript
+          inlineScript: |
+            echo "Deploying Container App: ${{ parameters.containerAppName }}"
 
-    - task: AzureCLI@2
-      displayName: "Deploy Container App"
-      inputs:
-        azureSubscription: ${{ parameters.subscriptionId }}
-        scriptType: bash
-        scriptLocation: inlineScript
-        inlineScript: |
-          echo "Deploying Container App: ${{ parameters.containerAppName }}"
+            az deployment group create \
+              --resource-group ${{ parameters.resourceGroupName }} \
+              --template-file "Bicep Templates/containerapp.bicep" \
+              --parameters \
+                containerAppName=${{ parameters.containerAppName }} \
+                containerImage=${{ parameters.containerImage }} \
+                environmentId=${{ parameters.containerAppEnvName }} \
+                acrLoginServer=${{ parameters.acrLoginServer }}
 
-          az deployment group create \
-            --resource-group ${{ parameters.resourceGroupName }} \
-            --template-file "Bicep Templates/container-app.bicep" \
-            --parameters \
-              containerAppName=${{ parameters.containerAppName }} \
-              containerAppEnvName=${{ parameters.containerAppEnvName }} \
-              containerImage=${{ parameters.containerImage }}
-
-          echo "Container App deployment completed."
+            echo "Container App deployment completed."

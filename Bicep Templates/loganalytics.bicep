@@ -5,7 +5,7 @@ param workspaceName string
 param location string = resourceGroup().location
 
 @description('SKU for the Log Analytics Workspace (PerGB2018 recommended)')
-param sku string = 'PerGB2018'
+param skuName string = 'PerGB2018'
 
 @description('The data retention period in days. 30 days is the minimum.')
 @minValue(30)
@@ -15,15 +15,18 @@ param retentionInDays int = 30
 @description('The maximum daily data ingestion volume limit in GB. Set to -1 for no limit.')
 param dailyQuotaGb int = -1
 
-resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2022-10-01' = {
+// Use a newer API version that includes the `sku` property in the workspace resource
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2021-06-01' = {
   name: workspaceName
   location: location
-  sku: {
-    name: sku
-  }
   properties: {
+    sku: {
+      name: skuName
+    }
     retentionInDays: retentionInDays
-    dailyQuotaGb: dailyQuotaGb
+    workspaceCapping: {
+      dailyQuotaGb: dailyQuotaGb
+    }
     publicNetworkAccessForIngestion: 'Enabled'
     publicNetworkAccessForQuery: 'Enabled'
   }

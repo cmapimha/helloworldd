@@ -7,20 +7,24 @@ param location string = resourceGroup().location
 @description('Resource ID of the Log Analytics Workspace')
 param logAnalyticsWorkspaceId string
 
-resource containerAppEnv 'Microsoft.Web/kubeEnvironments@2023-10-01' = {
+// FIX: Add the existing Log Analytics resource with API version
+resource logAnalytics 'Microsoft.OperationalInsights/workspaces@2021-12-01-preview' existing = {
+  name: last(split(logAnalyticsWorkspaceId, '/'))
+}
+
+resource containerAppEnv 'Microsoft.App/managedEnvironments@2023-05-01' = {
   name: environmentName
   location: location
   properties: {
-    type: 'Managed'
-    internalLoadBalancerEnabled: false
     appLogsConfiguration: {
       destination: 'log-analytics'
       logAnalyticsConfiguration: {
-        customerId: reference(logAnalyticsWorkspaceId).customerId
-        sharedKey: listKeys(logAnalyticsWorkspaceId, '2022-10-01').primarySharedKey
+        customerId: logAnalytics.properties.customerId
+        sharedKey: listKeys(logAnalyticsWorkspaceId, '2021-12-01-preview').primarySharedKey
       }
     }
   }
 }
 
 output environmentId string = containerAppEnv.id
+

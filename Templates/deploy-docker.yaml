@@ -3,12 +3,12 @@ parameters:
     type: string
   - name: acrLoginServer
     type: string
-  - name: imageName
+  - name: containerImage
     type: string
   - name: dockerfilePath
     type: string
     default: 'Dockerfile'
-  - name: clusterServiceConnection
+  - name: serviceConnection
     type: string
   - name: dependsOn
     type: object
@@ -27,7 +27,7 @@ jobs:
     - task: AzureCLI@2
       displayName: "Login to ACR"
       inputs:
-        azureSubscription: ${{ parameters.clusterServiceConnection }}
+        azureSubscription: ${{ parameters.serviceConnection }}
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
@@ -39,14 +39,14 @@ jobs:
         targetType: inline
         script: |
           docker build -f ${{ parameters.dockerfilePath }} \
-            -t ${{ parameters.acrLoginServer }}/${{ parameters.imageName }}:$(Build.BuildId) .
+            -t ${{ parameters.acrLoginServer }}/${{ parameters.containerImage }}:$(Build.BuildId) .
 
     - task: Bash@3
       displayName: "Push Docker Image"
       inputs:
         targetType: inline
         script: |
-          docker push ${{ parameters.acrLoginServer }}/${{ parameters.imageName }}:$(Build.BuildId)
+          docker push ${{ parameters.acrLoginServer }}/${{ parameters.containerImage }}:$(Build.BuildId)
 
     - task: Bash@3
       displayName: "Get Image Digest"
@@ -55,7 +55,7 @@ jobs:
         script: |
           digest=$(az acr repository show-manifests \
             --name ${{ parameters.acrName }} \
-            --repository ${{ parameters.imageName }} \
+            --repository ${{ parameters.containerImage }} \
             --query "[?tags && contains(tags, '$(Build.BuildId)')].digest" -o tsv)
 
           echo "##vso[task.setvariable variable=imageDigest]$digest"

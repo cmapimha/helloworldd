@@ -6,12 +6,12 @@ variables:
   value: 'my-work-blog'
 
 - name: location
-  value: 'eastus'
+  value: 'eastus2'
 
 - name: acrName
   value: 'acadockerhelloworldd'
 
-- name: logAnalyticsWorkspaceName
+- name: logAnalyticsName
   value: 'aca-helloworldd-log'
 
 - name: containerAppEnvName
@@ -23,14 +23,14 @@ variables:
 - name: containerImage
   value: 'acadockerdev.azurecr.io/hello-worldd:latest'
 
-  - name: ServiceConnection
-  value: 'will add this '
+- name: serviceConnection
+  value: 'my-work-helloworldd-portfolio'
 
 - name: aca-repo
   value: 'hello-worldd'
 
 - name: acrLoginServer
-  value: 'acadockerdev.azurecr.io'
+  value: 'acadockerhelloworldd.azurecr.io'
 
 - name: tag
   value: '$(Build.BuildId)'

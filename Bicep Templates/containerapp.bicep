@@ -13,16 +13,12 @@ param environmentId string
 @description('Login server of the Azure Container Registry')
 param acrLoginServer string
 
-@description('ACR username for pulling images')
-param acrUsername string
-
-@description('ACR password for pulling images')
-@secure()
-param acrPassword string
-
-resource containerApp 'Microsoft.Web/containerApps@2023-10-01' = {
+resource containerApp 'Microsoft.App/containerApps@2023-05-01' = {
   name: containerAppName
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {
     managedEnvironmentId: environmentId
     configuration: {
@@ -33,14 +29,7 @@ resource containerApp 'Microsoft.Web/containerApps@2023-10-01' = {
       registries: [
         {
           server: acrLoginServer
-          username: acrUsername
-          passwordSecretRef: 'acr-password'
-        }
-      ]
-      secrets: [
-        {
-          name: 'acr-password'
-          value: acrPassword
+          identity: 'systemAssigned'
         }
       ]
     }
@@ -50,7 +39,7 @@ resource containerApp 'Microsoft.Web/containerApps@2023-10-01' = {
           name: containerAppName
           image: containerImage
           resources: {
-            cpu: 0.5
+            cpu: 1
             memory: '1Gi'
           }
         }
@@ -61,3 +50,4 @@ resource containerApp 'Microsoft.Web/containerApps@2023-10-01' = {
 
 output containerAppId string = containerApp.id
 output containerAppUrl string = containerApp.properties.configuration.ingress.fqdn
+
