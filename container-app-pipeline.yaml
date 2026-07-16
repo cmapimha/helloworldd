@@ -22,7 +22,7 @@ stages:
     displayName: "Deploy Azure Container App"
     dependsOn: Build
     jobs:
-      - template: Templates/container-app.yaml
+      - template: Templates/containerapp.yaml
         parameters:
           subscriptionId: $(subscriptionId)
           resourceGroupName: $(resourceGroupName)
