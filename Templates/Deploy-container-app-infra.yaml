@@ -18,7 +18,7 @@ parameters:
     type: string
   - name: containerImage
     type: string
-  - name: ServiceConnection
+  - name: serviceConnection
     type: string
 
 jobs:
@@ -48,7 +48,7 @@ jobs:
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Deploy ACR'
           inputs:
-            azureResourceManagerConnection: '${{ parameters.ServiceConnection }}'
+            azureResourceManagerConnection: '${{ parameters.serviceConnection }}'
             subscriptionId: '${{ parameters.subscriptionId }}'
             resourceGroupName: '${{ parameters.resourceGroupName }}'
             location: '${{ parameters.location }}'
@@ -60,7 +60,7 @@ jobs:
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Deploy Log Analytics'
           inputs:
-            azureResourceManagerConnection: '${{ parameters.ServiceConnection }}'
+            azureResourceManagerConnection: '${{ parameters.serviceConnection }}'
             subscriptionId: '${{ parameters.subscriptionId }}'
             resourceGroupName: '${{ parameters.resourceGroupName }}'
             location: '${{ parameters.location }}'
@@ -72,7 +72,7 @@ jobs:
         - task: AzureResourceManagerTemplateDeployment@3
           displayName: 'Deploy Container Apps Environment'
           inputs:
-            azureResourceManagerConnection: '${{ parameters.ServiceConnection }}'
+            azureResourceManagerConnection: '${{ parameters.serviceConnection }}'
             subscriptionId: '${{ parameters.subscriptionId }}'
             resourceGroupName: '${{ parameters.resourceGroupName }}'
             location: '${{ parameters.location }}'
