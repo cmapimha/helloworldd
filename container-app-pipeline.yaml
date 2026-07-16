@@ -31,4 +31,5 @@ stages:
           containerImage: "$(acrLoginServer)/$(aca-repo):$(Build.BuildId)"
           acrLoginServer: $(acrLoginServer)
           serviceConnection: 'my-work-helloworldd-portfolio'
+          location: $(location)
       
