@@ -9,7 +9,6 @@ variables:
 stages:
   - stage: Build
     displayName: "Build & Push Docker Image"
-
     jobs:
       - template: Templates/deploy-docker.yaml
         parameters:
@@ -22,7 +21,6 @@ stages:
   - stage: Deploy
     displayName: "Deploy Azure Container App"
     dependsOn: Build
-
     jobs:
       - template: Templates/container-app.yaml
         parameters:
@@ -33,4 +31,5 @@ stages:
           containerImage: "$(acrLoginServer)/$(aca-repo):$(Build.BuildId)"
           acrLoginServer: $(acrLoginServer)
           serviceConnection: 'my-work-helloworldd-portfolio'
+          location: $(location)
       
