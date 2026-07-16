@@ -6,7 +6,7 @@ variables:
   value: 'my-work-blog'
 
 - name: location
-  value: 'eastus'
+  value: 'eastus2'
 
 - name: acrName
   value: 'acadockerhelloworldd'
