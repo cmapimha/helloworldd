@@ -19,7 +19,7 @@ stages:
           resourceGroupName: $(resourceGroupName)
           location: $(location)
           acrName: $(acrName)
-          logAnalyticsWorkspaceName: $(logAnalyticsWorkspaceName)
+          logAnalyticsName: $(logAnalyticsName)
           containerAppEnvName: $(containerAppEnvName)
           containerAppName: $(containerAppName)
           containerImage: $(containerImage)
