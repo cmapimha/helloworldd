@@ -1,6 +1,7 @@
 parameters:
   - name: environmentName
     type: string
+    default: 'Dev'
   - name: subscriptionId
     type: string
   - name: resourceGroupName
