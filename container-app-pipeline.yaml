@@ -14,7 +14,7 @@ stages:
     displayName: "Build & Push Docker Image"
 
     jobs:
-      - template: build-image.yaml
+      - template: Templates/deploy-docker.yaml
         parameters:
           containerRegistry: $(acrLoginServer)
           repositoryName: $(acaRepo)
